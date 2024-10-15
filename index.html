@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check out this BUCKET!</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.13/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+</head>
+<body class="container flex flex-col justify-between items-center text-lg h-screen min-w-screen">
+  <h1 classname="text-2xl">Check out the contents of this BUCKET!</h1>
+
+  <h2 classname="text-xl">Upload a file</h2>
+  <form id="uploadForm" enctype="multipart/form-data">
+  <input type="file" name="image" id="fileInput" class="file-input file-input-bordered max-w-lg">
+  <button type="submit" onclick="uploadFile()" class="btn btn-neutral">Upload</button>
+  <p id="uploadStatus"></p>
+  </form>
+  <h2 classname="text-xl">List all files</h2>
+  <button id="listFiles" class="btn btn-neutral" onclick="listFiles()">List files</button>
+  <ul id="fileList" class="text-emerald-800 card bg-base-100 shadow-xl w-4/5 rounded-none"></ul>
+
+  <h2 classname="text-xl">Get a file</h2>
+
+  <div class="divider container">
+    <input type="text" id="fileNameInput" placeholder="Enter file name" class="input input-bordered w-1/2">
+  <button onclick="retrieveFile()" class="btn btn-neutral">Get file</button></div>
+  <div id="selectedImageContainer" class="max-w-[75%]">
+  </div>
+   <script>
+        
+        // List all files
+        function listFiles() {
+            fetch(`/images`)
+                .then(response => response.json())
+                .then(data => {
+                        const fileList = document.getElementById('fileList');
+                        fileList.innerHTML = '';
+                    data.forEach(file => {
+                        const li = document.createElement('li');
+                        li.textContent = file.Key;
+                        fileList.appendChild(li);
+                    });
+                });
+        }
+
+
+        function uploadFile() {
+            const formData = new FormData(document.getElementById('uploadForm'));
+            fetch(`/images`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('uploadStatus').textContent = data;
+            });
+        }
+
+        // Retrieve a file
+        function retrieveFile() {
+            const fileName = document.getElementById('fileNameInput').value;
+            fetch(`/images/${fileName}`)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const img = document.createElement('img');
+                    img.src = url;
+                    document.getElementById('selectedImageContainer').innerHTML = '';
+                    document.getElementById('selectedImageContainer').appendChild(img);
+                });
+        }
+    </script>
+</body>
+</html>

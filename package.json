@@ -1,0 +1,22 @@
+{
+  "name": "s3-uploader",
+  "version": "1.0.0",
+  "description": "Upload to S3 bucket",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "William Learned",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.670.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-fileupload": "^1.5.1",
+    "nodemon": "^3.1.7"
+  },
+  "devDependencies": {
+    "@types/express-fileupload": "^1.5.1"
+  }
+}
