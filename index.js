@@ -1,7 +1,6 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const path = require('path');
-const fs = require('fs');
 const { S3Client, ListObjectsV2Command, GetObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
 
 require('dotenv').config();
@@ -9,26 +8,34 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Use express-fileupload middleware to handle file uploads
 app.use(
   fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },
   })
 );
 
+// Set the s3 client options
 const clientOptions = {
   region: 'us-east-1',
   endpoint: 'http://localhost:4566',
   forcePathStyle: true,
 };
 
+// Create an S3 client
 const s3Client = new S3Client(clientOptions);
 
-const bucketName = 'local-bucket-wll';
+// Get the bucket name from the environment variables
+const bucketName = process.env.BUCKET_NAME || 'local-bucket-wll';
 
+// Load the html file when the root URL is accessed
+// The file loads Tailwind and DaisyUI for styling via CDN
+// The file also contains an inline functions to communicate with the endpoints
 app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// List all images in the bucket
 app.get('/images', async (_req, res) => {
   try {
     const listObjectsParams = {
@@ -43,6 +50,7 @@ app.get('/images', async (_req, res) => {
   }
 });
 
+// Get a specific image from the bucket by key
 app.get('/images/:key', async (req, res) => {
   try {
     const getObjectParams = {
@@ -62,6 +70,7 @@ app.get('/images/:key', async (req, res) => {
   }
 });
 
+// Upload an image to the bucket
 app.post('/images', async (req, res) => {
   try {
     const file = req.files?.image;
@@ -84,11 +93,13 @@ app.post('/images', async (req, res) => {
   }
 });
 
+// Attempt to catch any unhandled errors
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something is not working!');
 });
 
+// Start the server on the specified port
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
