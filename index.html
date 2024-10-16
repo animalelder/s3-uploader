@@ -7,19 +7,19 @@
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.13/dist/full.min.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 </head>
-<body class="container flex flex-col justify-center items-center text-lg h-screen min-w-screen space-y-5">
-  <p classname="text-3xl">Check out the contents of this BUCKET!</p>
+<body class="container flex flex-col justify-evenly items-center text-lg h-screen min-w-screen overflow-y-auto">
+  <p classname="text-3xl object-top">Check out the contents of this BUCKET!</p>
 
   <h2 classname="text-2xl">Upload a file</h2>
-  <form id="uploadForm" enctype="multipart/form-data">
-  <input type="file" name="image" id="fileInput" class="file-input file-input-info file-input-bordered max-w-lg">
-  <button type="submit" onclick="uploadFile()" class="btn btn-secondary">Upload</button>
+  <form id="uploadForm" enctype="multipart/form-data" class="shadow-md border border-2 border-emerald-700/80 p-3 rounded-md">
+  <input type="file" name="image" id="fileInput" class="file-input  file-input-bordered max-w-lg">
+  <button type="submit" onclick="uploadFile()" class="btn btn-success">Upload</button>
   <p id="uploadStatus"></p>
   </form>
   <h2 classname="text-xl text-emerald-700">List all files</h2>
   <!-- <button id="listFiles" class="btn btn-neutral" onclick="listFiles()">List files</button> -->
   <!-- <ul id="fileList" class="text-emerald-800 card bg-base-100 shadow-xl w-4/5 rounded-none"></ul> -->
-<button class="btn btn-primary" onclick="listFiles()">Bucket Files List</button>
+<button class="btn btn-success" onclick="listFiles()">Bucket Files List</button>
 <dialog id="filesModal" class="modal w-full">
   <div class="modal-box">
     <form method="dialog">
@@ -31,9 +31,9 @@
 </dialog>
   <div class="divider"></div>
   <h2 classname="text-xl">Get a file</h2>
-  <div class="container">
-    <input type="text" id="fileNameInput" placeholder="Enter file name" class="input input-bordered w-1/2 mx-16">
-  <button onclick="retrieveFile()" class="btn btn-neutral">Get file</button></div>
+  <div class="flex justify-center gap-4">
+    <input type="text" id="fileNameInput" placeholder="Enter file name" class="input input-bordered min-w-3/4 w-4/5">
+  <button onclick="retrieveFile()" class="btn btn-success">Get file</button></div>
   <div id="selectedImageContainer" class="max-w-[75%]">
   </div>
    <script>
